@@ -1,5 +1,6 @@
 import unittest
 
+from cottonmouth import constants
 from cottonmouth import tags
 from cottonmouth.html import render
 
@@ -60,11 +61,9 @@ class TestHTML(unittest.TestCase):
             '<div id="container"><p>paragraph 2</p></div>'
         )
 
-    def test_import_all_tags(self):
-        from cottonmouth.constants import HTML_TAGS
-        from cottonmouth.tags import *
-        for tag in HTML_TAGS:
-            self.assertTrue(tag in locals())
+    def test_all_tags(self):
+        for tag in constants.HTML_TAGS:
+            self.assertTrue(hasattr(tags, tag))
 
     def test_readme_example(self):
         from cottonmouth.tags import html, head, body, title, meta, link, h1
