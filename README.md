@@ -32,7 +32,7 @@ content = (
             ['#main', welcome]]]
 )
 
-print render(*content, user=None)
+render(*content, user=None)
 ```
 
 Equivalent output:
