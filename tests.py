@@ -86,7 +86,6 @@ class TestHTML(unittest.TestCase):
                     ['#map.pretty-map'],
                     ['#main', welcome]]]
         )
-        print render(*content)
         self.assertTrue(isinstance(render(*content), unicode))
 
 
