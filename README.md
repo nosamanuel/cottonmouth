@@ -1,11 +1,6 @@
 cottonmouth
 ===========
 
-Pure-Python HTML generation
-=======
-Cottonmouth
-===========
-
 Pure-Python HTML generation, inspired by [Hiccup][1].
 
 ```python
