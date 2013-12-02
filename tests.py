@@ -77,9 +77,9 @@ class TestHTML(unittest.TestCase):
                 [head,
                     [title, 'The Site'],
                     [meta, {'http-equiv': 'content-type',
-                           'content': 'text/html;charset=utf-8'}],
+                            'content': 'text/html;charset=utf-8'}],
                     [link, dict(rel='stylesheet', type='text/css',
-                               href='static/layout.css')]],
+                                href='static/layout.css')]],
                 [body,
                     h1(u'Welcome to the site!', id='header'),
                     ['#map.pretty-map'],
@@ -87,6 +87,13 @@ class TestHTML(unittest.TestCase):
         )
         self.assertTrue(isinstance(render(*content), unicode))
 
+    def test_unicode_coercion(self):
+        object_ = object()
+        content = ['p', object_]
+        self.assertEqual(
+            render(content),
+            u'<p>{}</p>'.format(unicode(object_))
+        )
 
 if __name__ == '__main__':
     unittest.main()

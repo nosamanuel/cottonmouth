@@ -17,10 +17,10 @@ def render_content(content, **context):
 
     Content can be one of the following:
 
-      - A string containing raw HTML
-      - A callable
+      - A string containing raw HTML, rendered as-is
+      - A callable that will be called with the current **context
       - A sequence beginning with a literal HTML tag name
-      - A sequence of any of the above
+      - Any other value, coerced to unicode
     """
     if content is None:
         yield u''
@@ -32,6 +32,8 @@ def render_content(content, **context):
     elif isinstance(content, collections.Iterable):
         for e in render_iterable(content, **context):
             yield e
+    else:
+        yield unicode(content)
 
 
 def render_iterable(content, **context):
