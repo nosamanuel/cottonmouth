@@ -3,6 +3,9 @@ import itertools
 
 from . import constants
 
+CLASS_NAME_COLLISION_MESSAGE = \
+    u'Class names must be set in the tag or the attribute, not both.'
+
 
 def render(*content, **context):
     """
@@ -84,9 +87,11 @@ def render_tag(tag, content, **context):
         tag, extra['id'] = chunks[0].split('#')
 
     # Format classes
-    classes = extra.get('class', [])
-    classes.extend(chunks[1:])
-    if classes:
+    classes = chunks[1:]
+    dynamic_class = extra.get('class')
+    if classes and dynamic_class:
+        raise ValueError(CLASS_NAME_COLLISION_MESSAGE)
+    elif classes:
         extra['class'] = ' '.join(classes)
 
     # Format attributes
