@@ -15,6 +15,12 @@ class TestHTML(unittest.TestCase):
             '<div id="my" class="test">testing</div>'
         )
 
+    def test_div_shortcut_with_classname(self):
+        self.assertEqual(
+            render(['.test', 'testing']),
+            '<div class="test">testing</div>'
+        )
+
     def test_image(self):
         self.assertEqual(
             render(['img', {'src': 'image.png'}]),
@@ -94,6 +100,36 @@ class TestHTML(unittest.TestCase):
             render(content),
             u'<p>{}</p>'.format(unicode(object_))
         )
+
+    def test_class_name_are_set_via_attributes(self):
+        content = ['span', {'class': 'foo'}, 'hello']
+        self.assertEqual(
+            render(content),
+            u'<span class="foo">hello</span>'
+        )
+
+    def test_class_names_are_extended_via_string_attribute(self):
+        content = ['span.foo', {'class': 'bar'}, 'hello']
+        self.assertEqual(
+            render(content),
+            u'<span class="foo bar">hello</span>'
+        )
+
+    def test_class_names_are_extended_via_list_attribute(self):
+        content = ['span.foo', {'class': ['bar', 'baz']}, 'hello']
+        self.assertEqual(
+            render(content),
+            u'<span class="foo bar baz">hello</span>'
+        )
+
+    def test_class_names_are_extended_via_iterable_attribute(self):
+        classes = (_ for _ in ['bar', 'baz'])
+        content = ['span.foo', {'class': classes}, 'hello']
+        self.assertEqual(
+            render(content),
+            u'<span class="foo bar baz">hello</span>'
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

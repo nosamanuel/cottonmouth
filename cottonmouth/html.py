@@ -68,11 +68,13 @@ def render_tag(tag, content, **context):
         # If there is no remainder, we just render the tag
         extra, remainder = {}, []
     except TypeError:
-        # If the
+        # There are no extra attributes
         extra, remainder = {}, content
 
     # Default to div if no explicit tag is provided
     if tag.startswith(u'#'):
+        tag = u'div{}'.format(tag)
+    elif tag.startswith(u'.'):
         tag = u'div{}'.format(tag)
 
     # Split tag into ["tag#id", "class1", "class2", ...] chunks
@@ -83,14 +85,20 @@ def render_tag(tag, content, **context):
     if u'#' in chunks[0]:
         tag, extra['id'] = chunks[0].split('#')
 
+    # Parse classes
+    classes = chunks[1:]
+    extra_classes = extra.get('class')
+    if isinstance(extra_classes, basestring):
+        classes.extend(extra_classes.split())
+    elif extra_classes:
+        classes.extend(extra_classes)
+
     # Format classes
-    classes = extra.get('class', [])
-    classes.extend(chunks[1:])
     if classes:
-        extra['class'] = ' '.join(classes)
+        extra['class'] = u' '.join(classes)
 
     # Format attributes
-    attributes = ''.join([u' {}="{}"'.format(*i) for i in extra.items()])
+    attributes = u''.join([u' {}="{}"'.format(*i) for i in extra.items()])
 
     # Start our tag sandwich
     yield u'<{}{}>'.format(tag, attributes)
