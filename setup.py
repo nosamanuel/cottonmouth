@@ -9,7 +9,7 @@ with open('LICENSE') as f:
 
 setup(
     name='cottonmouth',
-    version='0.2.0',
+    version='0.2.1',
     description='Pure-Python HTML generation',
     long_description=readme,
     author='Noah Seger',
