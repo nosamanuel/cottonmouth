@@ -56,6 +56,19 @@ Equivalent output:
 ```
 
 
+### Classes
+
+There's a shortcut for dynamic classes: strings or iterables of classnames are automatically appended to the sugared classname!
+
+```python
+render(['.foo', {'class': 'bar baz'}])
+# u'<div class="foo bar baz"></div>'
+
+render(['.foo', {'class': ['bar', 'baz']}])
+# u'<div class="foo bar baz"></div>'
+```
+
+
 ### Installation
 
     pip install cottonmouth
