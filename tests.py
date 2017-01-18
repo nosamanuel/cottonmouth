@@ -2,7 +2,7 @@ import unittest
 
 from cottonmouth import constants
 from cottonmouth import tags
-from cottonmouth.html import render, CLASS_NAME_COLLISION_MESSAGE
+from cottonmouth.html import render
 
 
 class TestHTML(unittest.TestCase):
@@ -102,15 +102,20 @@ class TestHTML(unittest.TestCase):
             u'<span class="foo">hello</span>'
         )
 
-    def test_class_names_can_be_extended_via_attributes(self):
+    def test_class_names_can_be_extended_via_string_attribute(self):
         content = ['span.foo', {'class': 'bar'}, 'hello']
-        with self.assertRaises(ValueError) as context:
-            render(content)
-
         self.assertEqual(
-            unicode(context.exception),
-            CLASS_NAME_COLLISION_MESSAGE
+            render(content),
+            u'<span class="foo bar">hello</span>'
         )
+
+    def test_class_names_can_be_extended_via_list_attribute(self):
+        content = ['span.foo', {'class': ['bar', 'baz']}, 'hello']
+        self.assertEqual(
+            render(content),
+            u'<span class="foo bar baz">hello</span>'
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

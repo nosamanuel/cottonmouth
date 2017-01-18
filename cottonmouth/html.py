@@ -86,16 +86,20 @@ def render_tag(tag, content, **context):
     if u'#' in chunks[0]:
         tag, extra['id'] = chunks[0].split('#')
 
-    # Format classes
+    # Parse classes
     classes = chunks[1:]
-    dynamic_class = extra.get('class')
-    if classes and dynamic_class:
-        raise ValueError(CLASS_NAME_COLLISION_MESSAGE)
-    elif classes:
-        extra['class'] = ' '.join(classes)
+    extra_classes = extra.get('class')
+    if isinstance(extra_classes, basestring):
+        classes.extend(extra_classes.split())
+    elif extra_classes:
+        classes.extend(extra_classes)
+
+    # Format classes
+    if classes:
+        extra['class'] = u' '.join(classes)
 
     # Format attributes
-    attributes = ''.join([u' {}="{}"'.format(*i) for i in extra.items()])
+    attributes = u''.join([u' {}="{}"'.format(*i) for i in extra.items()])
 
     # Start our tag sandwich
     yield u'<{}{}>'.format(tag, attributes)
