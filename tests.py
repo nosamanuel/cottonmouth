@@ -15,6 +15,12 @@ class TestHTML(unittest.TestCase):
             '<div id="my" class="test">testing</div>'
         )
 
+    def test_div_shortcut_with_classname(self):
+        self.assertEqual(
+            render(['.test', 'testing']),
+            '<div class="test">testing</div>'
+        )
+
     def test_image(self):
         self.assertEqual(
             render(['img', {'src': 'image.png'}]),

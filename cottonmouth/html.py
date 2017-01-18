@@ -71,11 +71,13 @@ def render_tag(tag, content, **context):
         # If there is no remainder, we just render the tag
         extra, remainder = {}, []
     except TypeError:
-        # If the
+        # There are no extra attributes
         extra, remainder = {}, content
 
     # Default to div if no explicit tag is provided
     if tag.startswith(u'#'):
+        tag = u'div{}'.format(tag)
+    elif tag.startswith(u'.'):
         tag = u'div{}'.format(tag)
 
     # Split tag into ["tag#id", "class1", "class2", ...] chunks
