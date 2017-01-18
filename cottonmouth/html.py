@@ -3,9 +3,6 @@ import itertools
 
 from . import constants
 
-CLASS_NAME_COLLISION_MESSAGE = \
-    u'Class names must be set in the tag or the attribute, not both.'
-
 
 def render(*content, **context):
     """
