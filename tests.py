@@ -95,22 +95,30 @@ class TestHTML(unittest.TestCase):
             u'<p>{}</p>'.format(unicode(object_))
         )
 
-    def test_class_name_can_be_set_via_attributes(self):
+    def test_class_name_are_set_via_attributes(self):
         content = ['span', {'class': 'foo'}, 'hello']
         self.assertEqual(
             render(content),
             u'<span class="foo">hello</span>'
         )
 
-    def test_class_names_can_be_extended_via_string_attribute(self):
+    def test_class_names_are_extended_via_string_attribute(self):
         content = ['span.foo', {'class': 'bar'}, 'hello']
         self.assertEqual(
             render(content),
             u'<span class="foo bar">hello</span>'
         )
 
-    def test_class_names_can_be_extended_via_list_attribute(self):
+    def test_class_names_are_extended_via_list_attribute(self):
         content = ['span.foo', {'class': ['bar', 'baz']}, 'hello']
+        self.assertEqual(
+            render(content),
+            u'<span class="foo bar baz">hello</span>'
+        )
+
+    def test_class_names_are_extended_via_iterable_attribute(self):
+        classes = (_ for _ in ['bar', 'baz'])
+        content = ['span.foo', {'class': classes}, 'hello']
         self.assertEqual(
             render(content),
             u'<span class="foo bar baz">hello</span>'
