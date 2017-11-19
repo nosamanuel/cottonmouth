@@ -1,9 +1,9 @@
 from . import constants
 
 
-class Tag(unicode):
+class Tag(str):
     def __call__(self, *content, **extra):
-        tag = [unicode(self), extra]
+        tag = [str(self), extra]
         tag.extend(content)
         yield tag
 
