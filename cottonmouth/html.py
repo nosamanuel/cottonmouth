@@ -56,6 +56,10 @@ def render_iterable(content, **context):
                 yield e
 
 
+def render_style(style_dict):
+    return u' '.join(k + ":" + str(v) + ";" for k, v in style_dict.items())
+
+
 def render_tag(tag, content, **context):
     """
     Renders an HTML tag with its content.
@@ -63,13 +67,13 @@ def render_tag(tag, content, **context):
     try:
         # Parse extra attributes and remainder
         content, remainder = itertools.tee(content)
-        extra = dict(**next(remainder))
+        attrs = dict(**next(remainder))
     except StopIteration:
         # If there is no remainder, we just render the tag
-        extra, remainder = {}, []
+        attrs, remainder = {}, []
     except TypeError:
-        # There are no extra attributes
-        extra, remainder = {}, content
+        # There are no attrs attributes
+        attrs, remainder = {}, content
 
     # Default to div if no explicit tag is provided
     if tag.startswith(u'#'):
@@ -83,11 +87,11 @@ def render_tag(tag, content, **context):
     # Parse tag and id out of tag shortcut
     tag = chunks[0]
     if u'#' in chunks[0]:
-        tag, extra['id'] = chunks[0].split('#')
+        tag, attrs['id'] = chunks[0].split('#')
 
     # Parse classes
     classes = chunks[1:]
-    extra_classes = extra.get('class')
+    extra_classes = attrs.get('class')
     if isinstance(extra_classes, basestring):
         classes.extend(extra_classes.split())
     elif extra_classes:
@@ -95,10 +99,14 @@ def render_tag(tag, content, **context):
 
     # Format classes
     if classes:
-        extra['class'] = u' '.join(classes)
+        attrs['class'] = u' '.join(classes)
+
+    # Format style
+    if attrs.get('style'):
+        attrs['style'] = u''.join([render_style(attrs['style'])])
 
     # Format attributes
-    attributes = u''.join([u' {}="{}"'.format(*i) for i in extra.items()])
+    attributes = u''.join([u' {}="{}"'.format(*i) for i in attrs.items()])
 
     # Start our tag sandwich
     yield u'<{}{}>'.format(tag, attributes)
