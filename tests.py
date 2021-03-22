@@ -1,5 +1,6 @@
 import unittest
 
+import six
 from cottonmouth import constants
 from cottonmouth import tags
 from cottonmouth.html import render
@@ -87,39 +88,39 @@ class TestHTML(unittest.TestCase):
                     [link, dict(rel='stylesheet', type='text/css',
                                 href='static/layout.css')]],
                 [body,
-                    h1(u'Welcome to the site!', id='header'),
+                    h1(six.u('Welcome to the site!'), id='header'),
                     ['#map.pretty-map'],
                     ['#main', welcome]]]
         )
-        self.assertTrue(isinstance(render(*content), unicode))
+        self.assertTrue(isinstance(render(*content), six.text_type))
 
     def test_unicode_coercion(self):
         object_ = object()
         content = ['p', object_]
         self.assertEqual(
             render(content),
-            u'<p>{}</p>'.format(unicode(object_))
+            six.u('<p>{}</p>').format(six.text_type(object_))
         )
 
     def test_class_name_are_set_via_attributes(self):
         content = ['span', {'class': 'foo'}, 'hello']
         self.assertEqual(
             render(content),
-            u'<span class="foo">hello</span>'
+            six.u('<span class="foo">hello</span>')
         )
 
     def test_class_names_are_extended_via_string_attribute(self):
         content = ['span.foo', {'class': 'bar'}, 'hello']
         self.assertEqual(
             render(content),
-            u'<span class="foo bar">hello</span>'
+            six.u('<span class="foo bar">hello</span>')
         )
 
     def test_class_names_are_extended_via_list_attribute(self):
         content = ['span.foo', {'class': ['bar', 'baz']}, 'hello']
         self.assertEqual(
             render(content),
-            u'<span class="foo bar baz">hello</span>'
+            six.u('<span class="foo bar baz">hello</span>')
         )
 
     def test_class_names_are_extended_via_iterable_attribute(self):
@@ -127,7 +128,7 @@ class TestHTML(unittest.TestCase):
         content = ['span.foo', {'class': classes}, 'hello']
         self.assertEqual(
             render(content),
-            u'<span class="foo bar baz">hello</span>'
+            six.u('<span class="foo bar baz">hello</span>')
         )
 
 

@@ -1,9 +1,10 @@
+import six
 from . import constants
 
 
-class Tag(unicode):
+class Tag(six.text_type):
     def __call__(self, *content, **extra):
-        tag = [unicode(self), extra]
+        tag = [six.text_type(self), extra]
         tag.extend(content)
         yield tag
 

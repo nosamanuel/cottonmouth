@@ -17,5 +17,6 @@ setup(
     url='https://github.com/nosamanuel/cottonmouth',
     license=license,
     packages=find_packages(exclude=('tests', 'docs')),
+    install_requires=['six'],
     test_suite='tests',
 )
