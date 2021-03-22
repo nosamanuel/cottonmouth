@@ -1,4 +1,5 @@
-import collections
+import six
+from six.moves.collections_abc import Iterable
 import itertools
 
 from . import constants
@@ -8,7 +9,7 @@ def render(*content, **context):
     """
     Renders a sequence of content as HTML.
     """
-    return u''.join((e for c in content for e in render_content(c, **context)))
+    return six.u('').join(e for c in content for e in render_content(c, **context))
 
 
 def render_content(content, **context):
@@ -23,17 +24,17 @@ def render_content(content, **context):
       - Any other value, coerced to unicode
     """
     if content is None:
-        yield u''
-    elif isinstance(content, basestring):
+        yield six.u('')
+    elif isinstance(content, six.string_types):
         yield content
     elif callable(content):
         for e in render_content(content(**context), **context):
             yield e
-    elif isinstance(content, collections.Iterable):
+    elif isinstance(content, Iterable):
         for e in render_iterable(content, **context):
             yield e
     else:
-        yield unicode(content)
+        yield six.text_type(content)
 
 
 def render_iterable(content, **context):
@@ -44,11 +45,11 @@ def render_iterable(content, **context):
     head = next(tail)
 
     # Render tag around the content
-    if isinstance(head, basestring):
+    if isinstance(head, six.string_types):
         for e in render_tag(head, tail, **context):
             yield e
     # Render nested lists
-    elif isinstance(head, collections.Iterable):
+    elif isinstance(head, Iterable):
         for e in render_iterable(head, **context):
             yield e
         for content in tail:
@@ -72,36 +73,36 @@ def render_tag(tag, content, **context):
         extra, remainder = {}, content
 
     # Default to div if no explicit tag is provided
-    if tag.startswith(u'#'):
-        tag = u'div{}'.format(tag)
-    elif tag.startswith(u'.'):
-        tag = u'div{}'.format(tag)
+    if tag.startswith(six.u('#')):
+        tag = six.u('div{}').format(tag)
+    elif tag.startswith(six.u('.')):
+        tag = six.u('div{}').format(tag)
 
     # Split tag into ["tag#id", "class1", "class2", ...] chunks
     chunks = tag.split('.')
 
     # Parse tag and id out of tag shortcut
     tag = chunks[0]
-    if u'#' in chunks[0]:
+    if six.u('#') in chunks[0]:
         tag, extra['id'] = chunks[0].split('#')
 
     # Parse classes
     classes = chunks[1:]
     extra_classes = extra.get('class')
-    if isinstance(extra_classes, basestring):
+    if isinstance(extra_classes, six.string_types):
         classes.extend(extra_classes.split())
     elif extra_classes:
         classes.extend(extra_classes)
 
     # Format classes
     if classes:
-        extra['class'] = u' '.join(classes)
+        extra['class'] = six.u(' ').join(classes)
 
     # Format attributes
-    attributes = u''.join([u' {}="{}"'.format(*i) for i in extra.items()])
+    attributes = six.u('').join([six.u(' {}="{}"').format(*i) for i in extra.items()])
 
     # Start our tag sandwich
-    yield u'<{}{}>'.format(tag, attributes)
+    yield six.u('<{}{}>').format(tag, attributes)
 
     # Render the delicious filling or toppings
     for content in remainder:
@@ -110,4 +111,4 @@ def render_tag(tag, content, **context):
 
     # CLOSE THE TAG IF WE HAVE TO I GUESS
     if tag not in constants.HTML_VOID_TAGS:
-        yield u'</{}>'.format(tag)
+        yield six.u('</{}>').format(tag)
