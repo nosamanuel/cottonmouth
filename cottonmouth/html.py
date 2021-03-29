@@ -8,10 +8,7 @@ def render(*content, **context):
     """
     Renders a sequence of content as HTML.
     """
-    return ''.join(
-        e for c in content
-        for e in render_content(c, **context)
-    )
+    return ''.join(e for c in content for e in render_content(c, **context))
 
 
 def render_content(content, **context):
@@ -58,7 +55,6 @@ def render_iterable(content, **context):
             for e in render_content(content, **context):
                 yield e
 
-
 def render_tag(tag, content, **context):
     """
     Renders an HTML tag with its content.
@@ -76,9 +72,9 @@ def render_tag(tag, content, **context):
 
     # Default to div if no explicit tag is provided
     if tag.startswith('#'):
-        tag = 'div{}'.format(tag)
+        tag = f'div{tag}'
     elif tag.startswith('.'):
-        tag = 'div{}'.format(tag)
+        tag = f'div{tag}'
 
     # Split tag into ["tag#id", "class1", "class2", ...] chunks
     chunks = tag.split('.')
@@ -101,10 +97,11 @@ def render_tag(tag, content, **context):
         extra['class'] = ' '.join(classes)
 
     # Format attributes
-    attributes = ''.join([' {}="{}"'.format(*i) for i in extra.items()])
+    attributes = [f'{k}="{v}"' for k,v in extra.items()]
+    tag_contents = ' '.join([tag] + attributes)
 
     # Start our tag sandwich
-    yield '<{}{}>'.format(tag, attributes)
+    yield f'<{tag_contents}>'
 
     # Render the delicious filling or toppings
     for content in remainder:
@@ -113,4 +110,4 @@ def render_tag(tag, content, **context):
 
     # CLOSE THE TAG IF WE HAVE TO I GUESS
     if tag not in constants.HTML_VOID_TAGS:
-        yield '</{}>'.format(tag)
+        yield f'</{tag}>'

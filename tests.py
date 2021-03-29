@@ -130,6 +130,12 @@ class TestHTML(unittest.TestCase):
             '<span class="foo bar baz">hello</span>'
         )
 
+    def test_input_tag_closed(self):
+        content = ['input', {'type': 'text'}, 'hello']
+        self.assertEqual(
+            render(content),
+            '<input type="text">hello</input>'
+        )
 
 if __name__ == '__main__':
     unittest.main()
