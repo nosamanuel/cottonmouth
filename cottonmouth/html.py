@@ -55,6 +55,20 @@ def render_iterable(content, **context):
             for e in render_content(content, **context):
                 yield e
 
+def render_attribute(key, value):
+    """
+    Renders a tag attribute key/value pair.
+    """
+    # map from type(value) -> fn(type(value)) -> str
+    # by default, cast to string and wrap in quotes
+    def map_value_type(value):
+        return {
+            # map bool to "true"/"false"
+            bool: lambda x: str(x).lower()
+        }.get(type(value), lambda x: f'{x}')(value)
+
+    return f'{key}="{map_value_type(value)}"'
+
 def render_tag(tag, content, **context):
     """
     Renders an HTML tag with its content.
@@ -97,7 +111,7 @@ def render_tag(tag, content, **context):
         extra['class'] = ' '.join(classes)
 
     # Format attributes
-    attributes = [f'{k}="{v}"' for k,v in extra.items()]
+    attributes = [render_attribute(k,v) for k,v in extra.items()]
     tag_contents = ' '.join([tag] + attributes)
 
     # Start our tag sandwich
