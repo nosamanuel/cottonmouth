@@ -137,5 +137,12 @@ class TestHTML(unittest.TestCase):
             '<input type="text">hello</input>'
         )
 
+    def test_input_tag_checked(self):
+        content = ['input', {'type': 'checkbox', 'checked': True}]
+        self.assertEqual(
+            render(content),
+            '<input type="checkbox" checked="true"></input>'
+        )
+
 if __name__ == '__main__':
     unittest.main()
