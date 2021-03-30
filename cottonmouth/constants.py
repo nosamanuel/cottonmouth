@@ -7,7 +7,6 @@ HTML_VOID_TAGS = [
     'embed',
     'hr',
     'img',
-    'input',
     'keygen',
     'link',
     'meta',
