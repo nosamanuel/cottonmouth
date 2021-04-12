@@ -144,5 +144,12 @@ class TestHTML(unittest.TestCase):
             '<input type="checkbox" checked="true"></input>'
         )
 
+    def test_attribute_dicts_as_style_tags(self):
+        content = ['div', {'style': {'visibility': 'hidden'}}]
+        self.assertEqual(
+            render(content),
+            '<div style="visibility: hidden"></div>'
+        )
+
 if __name__ == '__main__':
     unittest.main()
