@@ -130,6 +130,26 @@ class TestHTML(unittest.TestCase):
             '<span class="foo bar baz">hello</span>'
         )
 
+    def test_input_tag_closed(self):
+        content = ['input', {'type': 'text'}, 'hello']
+        self.assertEqual(
+            render(content),
+            '<input type="text">hello</input>'
+        )
+
+    def test_input_tag_checked(self):
+        content = ['input', {'type': 'checkbox', 'checked': True}]
+        self.assertEqual(
+            render(content),
+            '<input type="checkbox" checked="true"></input>'
+        )
+
+    def test_attribute_dicts_as_style_tags(self):
+        content = ['div', {'style': {'visibility': 'hidden'}}]
+        self.assertEqual(
+            render(content),
+            '<div style="visibility: hidden;"></div>'
+        )
 
 if __name__ == '__main__':
     unittest.main()
