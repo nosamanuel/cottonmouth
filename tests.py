@@ -148,7 +148,7 @@ class TestHTML(unittest.TestCase):
         content = ['div', {'style': {'visibility': 'hidden'}}]
         self.assertEqual(
             render(content),
-            '<div style="visibility: hidden"></div>'
+            '<div style="visibility: hidden;"></div>'
         )
 
 if __name__ == '__main__':

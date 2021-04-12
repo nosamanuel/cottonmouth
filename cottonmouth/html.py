@@ -66,7 +66,7 @@ def render_attribute(key, value):
             # map bool to "true"/"false"
             bool: lambda x: str(x).lower(),
             # treat attribute dicts as style
-            dict: lambda x: '; '.join(f'{k}: {v}' for k,v in x.items()),
+            dict: lambda x: ' '.join(f'{k}: {v};' for k,v in x.items()),
         }.get(type(value), lambda x: f'{x}')(value)
 
     return f'{key}="{map_value_type(value)}"'
